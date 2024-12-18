@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SavedGamesManager from "../components/SavedGamesManager";
 
 const GameHazari = () => {
@@ -10,6 +10,7 @@ const GameHazari = () => {
   ]);
   const [currentScores, setCurrentScores] = useState(players.map(() => ""));
   const [gameOver, setGameOver] = useState(false);
+  const [isNavigatingAway, setIsNavigatingAway] = useState(false);
 
   const handleInputChange = (index, value) => {
     const updatedScores = [...currentScores];
@@ -27,7 +28,14 @@ const GameHazari = () => {
     setPlayers(updatedPlayers);
 
     const updatedScores = [...currentScores];
-    updatedScores[index] = "";
+/*************  ✨ Codeium Command ⭐  *************/
+  /**
+   * Handles changes to the current scores input fields. Updates the state
+   * and marks the changes as unsaved.
+   * @param {number} index The index of the player whose score is being updated.
+   * @param {string} value The new value of the score input field.
+   */
+/******  5248f2ca-c465-450d-9d2c-d9c9b56bbd3d  *******/    updatedScores[index] = "";
     setCurrentScores(updatedScores);
 
     if (updatedPlayers[index].score >= 1000) {
@@ -50,6 +58,37 @@ const GameHazari = () => {
     setCurrentScores(loadedPlayers.map(() => ""));
     setGameOver(false);
   };
+
+  // Detect Back/Forward Navigation (popstate)
+  useEffect(() => {
+    const handlePopState = (e) => {
+      if (isNavigatingAway) return;
+
+      const confirmNavigation = window.confirm(
+        "Warning: You are about to leave the current game. Unsaved data will be lost. Save the game before navigating?"
+      );
+      if (!confirmNavigation) {
+        // Push the current state back onto the stack to cancel navigation
+        window.history.pushState(null, "", window.location.href);
+      } else {
+        setIsNavigatingAway(true);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [isNavigatingAway]);
+
+  // Warn on Page Refresh or Navigation (beforeunload)
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = ""; // Some browsers require this for the warning dialog to appear
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, []);
 
   return (
     <div className="container mx-auto p-4 bg-white rounded-lg shadow-lg">

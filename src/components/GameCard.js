@@ -43,7 +43,7 @@ const GameCard = ({ title, description, aboutContent, onPlay }) => {
               </p>
             </div>
           )}
-
+    
           {/* Toggle Read More */}
           <button
             onClick={toggleReadMore}
