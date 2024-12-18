@@ -47,7 +47,7 @@ const SavedGamesManager = ({ players, onLoadGame }) => {
   return (
     <div className="text-center mt-6 space-y-6">
       <button onClick={saveGame} className="bg-blue-500 text-white px-4 py-2 rounded">
-        Save Game
+        Save Score & Continue Later
       </button>
 
       {savedGames.length > 0 && (
