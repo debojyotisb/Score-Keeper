@@ -2,7 +2,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-800 text-white py-4 flex justify-between items-center px-10">
       <p>
-        © 2024 Card Scorekeeper. Made by{" "}
+        v0.2 © 2024 Card Scorekeeper. Made by{" "}
         <a
           href="https://www.linkedin.com/in/debojyoti-suklabaidya-696a86219"
           target="_blank"

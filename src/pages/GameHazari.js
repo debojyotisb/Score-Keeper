@@ -11,11 +11,13 @@ const GameHazari = () => {
   const [currentScores, setCurrentScores] = useState(players.map(() => ""));
   const [gameOver, setGameOver] = useState(false);
   const [isNavigatingAway, setIsNavigatingAway] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null); // Track the currently edited player index.
 
   const handleInputChange = (index, value) => {
     const updatedScores = [...currentScores];
     updatedScores[index] = value;
     setCurrentScores(updatedScores);
+
   };
 
   const handleSubmit = (index) => {
@@ -27,31 +29,36 @@ const GameHazari = () => {
     updatedPlayers[index].score += value;
     setPlayers(updatedPlayers);
 
+    // Sort players based on scores in descending order
+    updatedPlayers.sort((a, b) => b.score - a.score);
+
+    setPlayers(updatedPlayers);
+
     const updatedScores = [...currentScores];
-/*************  ✨ Codeium Command ⭐  *************/
-  /**
-   * Handles changes to the current scores input fields. Updates the state
-   * and marks the changes as unsaved.
-   * @param {number} index The index of the player whose score is being updated.
-   * @param {string} value The new value of the score input field.
-   */
-/******  5248f2ca-c465-450d-9d2c-d9c9b56bbd3d  *******/    updatedScores[index] = "";
+    updatedScores[index] = "";
     setCurrentScores(updatedScores);
 
     if (updatedPlayers[index].score >= 1000) {
       setGameOver(true);
       alert(`${updatedPlayers[index].name} has won the game with ${updatedPlayers[index].score} points!`);
+      }
+    };
+    // Clear saved games from localStorage when the game ends
+  useEffect(() => {
+    if (gameOver) {
+      localStorage.removeItem("hazariSavedGames");
     }
-  };
+  }, [gameOver]);
 
-  const updateName = (index) => {
-    const newName = prompt(`Enter new name for ${players[index].name}:`, players[index].name);
-    if (newName) {
-      const updatedPlayers = [...players];
-      updatedPlayers[index].name = newName;
-      setPlayers(updatedPlayers);
-    }
-  };
+    const updateName = (index, newName) => {
+      if (newName.trim() !== "") {
+        const updatedPlayers = [...players];
+        updatedPlayers[index].name = newName;
+        setPlayers(updatedPlayers);
+      }
+      setEditingIndex(null); // Exit editing mode
+    };
+
 
   const loadGameFromSaved = (loadedPlayers) => {
     setPlayers(loadedPlayers);
@@ -96,16 +103,26 @@ const GameHazari = () => {
         Hazari or 360 Game Score Board
       </h1>
 
-      <div className="space-y-4">
+      <div className="space-y-4 transition-all duration-1000">
         {players.map((player, index) => (
-          <div key={index} className="bg-gray-50 p-4 rounded-lg shadow">
+          <div key={index} className="bg-gray-50 p-4 rounded-lg shadow transition-transform duration-1000 ease-in-out">
             <div className="flex justify-between items-center">
-              <span
-                className="text-lg font-medium cursor-pointer underline"
-                onClick={() => updateName(index)}
-              >
-                {player.name}
-              </span>
+            {editingIndex === index ? (
+                <input
+                  type="text"
+                  className="border px-2 py-1 rounded w-32"
+                  placeholder={player.name} // Placeholder shows the current name.
+                  onBlur={(e) => updateName(index, e.target.value)} // Update the name on losing focus.
+                  autoFocus
+                />
+              ) : (
+                <span
+                  className="text-lg font-medium cursor-pointer underline"
+                  onClick={() => setEditingIndex(index)} // Enter editing mode.
+                >
+                  {player.name}
+                </span>
+              )}
               <span className="text-lg font-bold text-green-600">
                 Subtotal: {player.score}
               </span>
