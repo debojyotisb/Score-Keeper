@@ -39,8 +39,8 @@ const GameHazari = () => {
     setCurrentScores(updatedScores);
 
     if (updatedPlayers[index].score >= 1000) {
-      setGameOver(true);
       alert(`${updatedPlayers[index].name} has won the game with ${updatedPlayers[index].score} points!`);
+      setGameOver(true);
       }
     };
     // Clear saved games from localStorage when the game ends

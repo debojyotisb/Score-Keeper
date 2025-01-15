@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 const SavedGamesManager = ({ players, onLoadGame, gameOver }) => {
   const [savedGames, setSavedGames] = useState([]);
-  const [showOlderGames, setShowOlderGames] = useState(false); // Toggle visibility of older games
+  const [showLoadScores, setshowLoadScores] = useState(false); // Toggle visibility of older games
 
   const loadSavedGames = () => {
     const games = JSON.parse(localStorage.getItem("hazariSavedGames")) || [];
@@ -29,20 +29,16 @@ const SavedGamesManager = ({ players, onLoadGame, gameOver }) => {
     const selectedGame = savedGames.find((game) => game.gameId === gameId);
     if (selectedGame) {
       onLoadGame(selectedGame.players);
+
+      // Remove the loaded game from saved games
+      const updatedGames = savedGames.filter((game) => game.gameId !== gameId);
+      localStorage.setItem("hazariSavedGames", JSON.stringify(updatedGames)); // Update localStorage
+      setSavedGames(updatedGames); // Update state
+      alert(`Game from ${selectedGame.dateTime} loaded successfully!`);
+      } else {
+          alert("Game not found!");
     }
   };
-
-  // Delete saved games when the game is over
-  useEffect(() => {
-    if (gameOver) {
-      localStorage.removeItem("hazariSavedGames");
-      setSavedGames([]);
-    }
-  }, [gameOver]);
-
-  useEffect(() => {
-    loadSavedGames();
-  }, []);
 
   return (
     <div className="text-center mt-6 space-y-6">
@@ -52,7 +48,7 @@ const SavedGamesManager = ({ players, onLoadGame, gameOver }) => {
 
       {savedGames.length > 0 && (
         <div className="mt-4">
-          <h2 className="text-xl font-bold mb-4">Saved Games:</h2>
+          <h2 className="text-xl font-bold mb-4">Saved Scores:</h2>
           <ul className="space-y-2">
             <li className="p-2 border rounded flex justify-between items-center bg-yellow-100">
               <div>
@@ -69,12 +65,12 @@ const SavedGamesManager = ({ players, onLoadGame, gameOver }) => {
             </li>
           </ul>
           <button
-            onClick={() => setShowOlderGames(!showOlderGames)}
+            onClick={() => setshowLoadScores(!showLoadScores)}
             className="bg-gray-500 text-white px-4 py-2 rounded mt-2"
           >
-            {showOlderGames ? "Hide Older Games" : "Show Older Games"}
+            {showLoadScores ? "Hide Older Score" : "Show Older Score"}
           </button>
-          {showOlderGames && (
+          {showLoadScores && (
             <ul className="space-y-2 mt-4">
               {savedGames.slice(1).map((game) => (
                 <li key={game.gameId} className="p-2 border rounded flex justify-between items-center">
