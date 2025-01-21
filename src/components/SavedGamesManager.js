@@ -3,12 +3,8 @@ import React, { useState, useEffect } from "react";
 
 const SavedGamesManager = ({ players, onLoadGame, gameOver }) => {
   const [savedGames, setSavedGames] = useState([]);
-  const [showLoadScores, setshowLoadScores] = useState(false); // Toggle visibility of older games
+  const [showLoadScores, setshowLoadScores] = useState(true); // Toggle visibility of older games
 
-  const loadSavedGames = () => {
-    const games = JSON.parse(localStorage.getItem("hazariSavedGames")) || [];
-    setSavedGames(games);
-  };
 
   const saveGame = () => {
     const dateTime = new Date().toLocaleString();
@@ -25,6 +21,11 @@ const SavedGamesManager = ({ players, onLoadGame, gameOver }) => {
     alert("Game saved successfully!");
   };
 
+  const loadSavedGames = () => {
+    const games = JSON.parse(localStorage.getItem("hazariSavedGames")) || [];
+    setSavedGames(games);
+  };
+
   const handleLoadGame = (gameId) => {
     const selectedGame = savedGames.find((game) => game.gameId === gameId);
     if (selectedGame) {
@@ -39,6 +40,10 @@ const SavedGamesManager = ({ players, onLoadGame, gameOver }) => {
           alert("Game not found!");
     }
   };
+  
+  useEffect(() => {
+    loadSavedGames();
+  }, []);
 
   return (
     <div className="text-center mt-6 space-y-6">

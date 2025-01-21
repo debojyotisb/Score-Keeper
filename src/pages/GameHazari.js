@@ -30,7 +30,7 @@ const GameHazari = () => {
     setPlayers(updatedPlayers);
 
     // Sort players based on scores in descending order
-    updatedPlayers.sort((a, b) => b.score - a.score);
+    // updatedPlayers.sort((a, b) => b.score - a.score);
 
     setPlayers(updatedPlayers);
 
