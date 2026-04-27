@@ -110,6 +110,11 @@ const GameHazari = () => {
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, []);
 
+  //for the total score of each round shown the below
+  const totalCurrentScore = currentScores.reduce((total, score) => {
+    return total + (parseIn(score) || 0);
+  }, 0);
+
   return (
     <div className="container mx-auto p-4 bg-white rounded-lg shadow-lg">
       <h1 className="text-4xl font-bold mb-6 text-center text-blue-700">
@@ -182,8 +187,36 @@ const GameHazari = () => {
         </div>
       )}
 
-      <SavedGamesManager players={players} onLoadGame={loadGameFromSaved} />
+      // <SavedGamesManager players={players} onLoadGame={loadGameFromSaved} /> 
+
+      <div className="mt-6 flex items-center justify-between gap-4">
+
+            {/* Save Button Section */}
+            <div className="flex-1">
+              <SavedGamesManager 
+                players={players} 
+                onLoadGame={loadGameFromSaved} 
+              />
+            </div>
+          
+            {/* Total Score Glass Box */}
+            <div className="min-w-[120px] text-center px-4 py-2 rounded-xl border-2 border-blue-400
+              bg-white/30 backdrop-blur-md shadow-md">
+          
+              <p className="text-xs text-gray-600">Total</p>
+          
+              <p className={`text-xl font-bold ${
+                totalCurrentScore === 360 ? "text-green-600" : "text-red-500"
+              }`}>
+                {totalCurrentScore}
+              </p>
+            </div>
+          </div>
+      
     </div>
+
+    
+
   );
 };
 
