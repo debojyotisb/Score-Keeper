@@ -142,6 +142,7 @@ const GameHazari = () => {
               <div className="flex space-x-2">
                 <input
                   type="number"
+                  autoCapitalize = "words"
                   placeholder="Score"
                   className="border px-1 py-0.5 rounded w-20"
                   value={currentScores[index]}
