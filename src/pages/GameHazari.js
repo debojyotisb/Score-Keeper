@@ -50,10 +50,23 @@ const GameHazari = () => {
     }
   }, [gameOver]);
 
+  // Players Name formating like Upper latter and lower
+  const formatName = (name) => {
+    return name 
+    .toLowerCase()
+    .trim()
+    .split(" ")
+    .filter(word => word !== "") //remove extra spaces;
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+  };
+
     const updateName = (index, newName) => {
       if (newName.trim() !== "") {
+        const formattedName = formatName(newName);
+        
         const updatedPlayers = [...players];
-        updatedPlayers[index].name = newName;
+        updatedPlayers[index].name = formattedName;
         setPlayers(updatedPlayers);
       }
       setEditingIndex(null); // Exit editing mode
