@@ -191,7 +191,7 @@ const GameHazari = () => {
         </div>
       )}
 
-      // <SavedGamesManager players={players} onLoadGame={loadGameFromSaved} /> 
+    {/* <SavedGamesManager players={players} onLoadGame={loadGameFromSaved} /> */}
 
       <div className="mt-6 flex items-center justify-between gap-4">
 
