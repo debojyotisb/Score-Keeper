@@ -20,29 +20,57 @@ const GameHazari = () => {
 
   };
 
+  // const handleSubmit = (index) => {
+  //   const value = parseInt(currentScores[index]);
+  //   if (isNaN(value)) return;
+
+  //   const updatedPlayers = [...players];
+  //   updatedPlayers[index].history.push(value);
+  //   updatedPlayers[index].score += value;
+  //   setPlayers(updatedPlayers);
+
+  //   // Sort players based on scores in descending order
+  //   // updatedPlayers.sort((a, b) => b.score - a.score);
+
+  //   setPlayers(updatedPlayers);
+
+  //   const updatedScores = [...currentScores];
+  //   updatedScores[index] = "";
+  //   setCurrentScores(updatedScores);
+
+  //   if (updatedPlayers[index].score >= 1000) {
+  //     alert(`${updatedPlayers[index].name} has won the game with ${updatedPlayers[index].score} points!`);
+  //     setGameOver(true);
+  //     }
+  //   };
+
   const handleSubmit = (index) => {
-    const value = parseInt(currentScores[index]);
-    if (isNaN(value)) return;
+  const value = parseInt(currentScores[index], 10);
+  if (isNaN(value)) return;
 
-    const updatedPlayers = [...players];
-    updatedPlayers[index].history.push(value);
-    updatedPlayers[index].score += value;
-    setPlayers(updatedPlayers);
+  const updatedPlayers = [...players];
 
-    // Sort players based on scores in descending order
-    // updatedPlayers.sort((a, b) => b.score - a.score);
+  const player = { ...updatedPlayers[index] };
+  player.history = [...player.history, value];
+  player.score = player.score + value;
 
-    setPlayers(updatedPlayers);
+  updatedPlayers[index] = player;
 
-    const updatedScores = [...currentScores];
-    updatedScores[index] = "";
-    setCurrentScores(updatedScores);
+  setPlayers(updatedPlayers); 
 
-    if (updatedPlayers[index].score >= 1000) {
-      alert(`${updatedPlayers[index].name} has won the game with ${updatedPlayers[index].score} points!`);
-      setGameOver(true);
-      }
-    };
+  const updatedScores = [...currentScores];
+  updatedScores[index] = "";
+  setCurrentScores(updatedScores);
+
+  if (player.score >= 1000) {
+    alert(`${player.name} has won the game with ${player.score} points!`);
+    setGameOver(true);
+  }
+};
+
+
+
+  
     // Clear saved games from localStorage when the game ends
   useEffect(() => {
     if (gameOver) {
