@@ -112,7 +112,7 @@ const GameHazari = () => {
 
   //for the total score of each round shown the below
   const totalCurrentScore = currentScores.reduce((total, score) => {
-    return total + (parseIn(score) || 0);
+    return total + (parseInt(score) || 0);
   }, 0);
 
   return (
